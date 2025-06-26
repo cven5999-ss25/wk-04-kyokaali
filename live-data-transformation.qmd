@@ -22,9 +22,13 @@ library(tidyr)
 
 # Data import
 
+AltGr /Alt = -
+
+Assignment operator: \<-
+
 ```{r}
 
-
+sanitation <- read_csv(here::here("data/jmp-washdata-indicators-safely-managed-sml.csv"))
 ```
 
 ## Explore data
@@ -37,7 +41,10 @@ All code for pre-processing and the imported data can be accessed from the [larn
 
 ```{r}
 
-
+sanitation
+glimpse(sanitation)
+head(sanitation)
+tail(sanitation)
 ```
 
 # Data wrangling with dplyr
@@ -54,9 +61,28 @@ The `dplyr` R Package aims to provide a function for each basic verb of data man
 
 The function `filter()` chooses rows based on column values. To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: \>, \>=, \<, \<=, != (not equal), and == (equal).
 
+ctrl+shift+M for pipe
+
 ```{r}
 
+sanitation |> 
+  filter (residence== "national")
+sanitation |> 
+  filter(residence=="national", iso3 =="SEN")
+sanitation |> 
+  filter (iso3== "UGA" | iso3== "GHA" | iso3=="USA")
 
+sanitation |> 
+  filter(iso3 %in% c("UGA", "GHA", "USA"))
+
+sanitation |>  
+  filter(residence != "national")
+
+sanitation |> 
+  filter(percent > 80)
+
+sanitation |> 
+  filter(percent < 5)
 ```
 
 #### Your turn
@@ -68,6 +94,11 @@ The function `filter()` chooses rows based on column values. To use filtering ef
 ```{r}
 
 
+sanitation_national_2020 <- sanitation |> 
+  filter(residence== "national", year == 2020) |> 
+  filter(!is.na(income_id))
+
+
 ```
 
 ### dplyr::arrange()
@@ -75,8 +106,11 @@ The function `filter()` chooses rows based on column values. To use filtering ef
 The function `arrange()` changes the order of the rows.
 
 ```{r}
+sanitation |> 
+  arrange(percent)
 
-
+sanitation |> 
+  arrange(desc(percent))
 
 ```
 
@@ -88,7 +122,17 @@ The function `select()` picks variables based on their names.
 
 ```{r}
 
+sanitation |> 
+  select(name,iso3, percent,year)
 
+sanitation |> 
+  select(name:percent, -year)
+
+sanitation |> 
+  select(name, starts_with ("p"))
+
+sanitation |> 
+  select(name,starts_with("p"))
 
 ```
 
@@ -105,7 +149,8 @@ Learn more: https://dplyr.tidyverse.org/reference/select.html
 The function `rename()` changes the name of columns.
 
 ```{r}
-
+sanitation |> 
+  rename(country_name = name)
 
 ```
 
@@ -114,8 +159,14 @@ The function `rename()` changes the name of columns.
 The function `relocate()` changes the order of the columns.
 
 ```{r}
+sanitation |> 
+  relocate(income_id)
 
+sanitation |> 
+  relocate(income_id, .after = year)
 
+sanitation |> 
+  relocate(income_id, .before = percent)
 ```
 
 ### dplyr::mutate()
@@ -124,7 +175,8 @@ The function `mutate()` changes the values of columns and creates new columns.
 
 ```{r}
 
-
+sanitation |> 
+  mutate(people_access = pop * percent /100)
 
 ```
 
@@ -144,16 +196,17 @@ ggplot(data = sanitation_national_2020,
   geom_boxplot(outlier.shape = NA) +
   geom_jitter(width = 0.1)
 
+# define the factor levels
+income_levels <- c("LIC", "LMC", "UMC", "HIC")
 
+# Let's check again with new data
 
-# Let's check again with the new data
-
-# ggplot(data = sanitation_national_2020_fct,
-#        mapping = aes(x = income_id_fct, 
-#                      y = percent, 
-#                      fill = income_id)) +
-#   geom_boxplot(outlier.shape = NA) +
-#   geom_jitter(width = 0.1)
+ggplot(data = sanitation_national_2020_fct,
+       mapping = aes(x = income_id_fct, 
+                     y = percent, 
+                     fill = income_id)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.1)
 
 
 ```
@@ -165,6 +218,20 @@ ggplot(data = sanitation_national_2020,
 ```{r}
 
 
+sanitation_national_2020_fct |> 
+  filter(!is.na(percent)) |> 
+  summarise(mean = mean(percent),
+            count = n(),
+            sd=sd(percent),
+            max=max(percent),
+            min = min(percent))
+
+
+sanitation_national_2020_fct |>
+  filter(!is.na(percent)) |> 
+  group_by(region) |> 
+  summarise(mean=mean(percent),
+    count = n())
 
 ```
 
@@ -181,6 +248,9 @@ ggplot(data = sanitation_national_2020,
 5.  Use the pipe operator to add another line of code which adds the `mutate()` function to add a new column with the percentage of people with access to safely managed sanitation in each region. Name the new column percent.
 
 ```{r}
+
+sanitation_national_2020_fct <- sanitation |> 
+  filter(year == 2020, estimate_type == "national") 
 
 
 ```
