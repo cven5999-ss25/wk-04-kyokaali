@@ -13,15 +13,17 @@ Learning reflections are part of your weekly homework and have a weight of 20% o
 
 # Lecture
 
-<!--# Add your reflections on the lecture of this week here -->
+\<The lecture was very helpful, as always. It introduced many new
+functions that expanded my understanding of how data can be organized, filtered, and transformed into meaningful subsets based on specific needs. It was insightful to see how flexible and powerful data manipulation in R can be. However, I recognize that consistent practice is essential to gain speed and familiarity with the different operations and workflows.\>
 
 # Homework Assignment
 
-<!--# Add your reflections on the homework programming assignment here -->
+\<The homework was equally engaging. Although it involved working with several new functions, it gave me a valuable opportunity to explore the full potential of R in manipulating and presenting data. I particularly enjoyed how the same dataset could be transformed in multiple ways and experimenting with different approaches to achieve similar results. I was also glad to finally resolve the issue I
+had with committing to GitHub, which I discovered was due to not accepting the invitation to the repository, a simple oversight that had not occurred to me.\>
 
 # Readings
 
-<!--# Add your reflections on the required readings here -->
+\<The readings significantly deepened my understanding of how to manipulate and explore data in a structured and efficient way. I appreciated the clear explanations and practical examples that demonstrated how to transform datasets to uncover meaningful patterns and trends. I also gained valuable insights into how combining different steps in a seamless workflow enhances both clarity and efficiency. Overall, the readings increased my confidence in working with real-world data and preparing it for further analysis and visualization.\>
 
 # Submit learning reflections
 
